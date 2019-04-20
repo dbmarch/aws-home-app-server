@@ -1,0 +1,27 @@
+{
+	"name": "aws-home-app-server",
+	"version": "1.0.0",
+	"description": "Provides the backend for react-aws-home-app",
+	"main": "server.js",
+	"dependencies": {
+		"body-parser": "^1.18.3",
+		"cors": "^2.8.5",
+		"express": "^4.16.4",
+		"path": "^0.12.7"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"start": "node ./src/server.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dbmarch/aws-home-app-server.git"
+	},
+	"author": "David March",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/dbmarch/aws-home-app-server/issues"
+	},
+	"homepage": "https://github.com/dbmarch/aws-home-app-server#readme"
+}

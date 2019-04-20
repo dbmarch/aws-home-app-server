@@ -1,0 +1,19 @@
+version: 0.2
+
+env:
+    variables:
+        environment: 'dev'
+        ECR_REPO: '/home-app'
+
+phases:
+    pre_build:
+        commands:
+    build:
+        commands:
+            - echo Build started on 'date'
+            - npm i
+        finally:
+            - echo build phase finished
+    post_build:
+        commands:
+            - echo Build completed on 'date'
