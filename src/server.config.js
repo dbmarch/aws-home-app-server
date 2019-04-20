@@ -2,7 +2,7 @@ module.exports = {
 	apps: [
 		{
 			name: 'aws-home-app-server',
-			script: './server.js',
+			script: './src/server.js',
 			instances: 0,
 			exec_mode: 'cluster',
 			watch: true,
