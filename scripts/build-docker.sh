@@ -2,7 +2,8 @@ echo "Running Build-docker.sh"
 export APP_NAME=`node -e "console.log(require('../package.json').name);"`
 export AWS_REGION="us-east-2"
 EXPORT ECR_REPO="327804519666.dkr.ecr.us-east-2.amazonaws.com/home-app-server"
-EXPORT VERSION=`node -e "console.log(require(../package.json').version);"`
+EXPORT VERSION=`node -e "console.log(require(''../package.json').version);"`
+echo ${VERSION}
 
 if [ -f packaget-lock.json ]; then
   echo "Using locked versions"
