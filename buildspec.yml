@@ -4,18 +4,16 @@ env:
     variables:
         environment: 'dev'
         ECR_REPO: '/home-app'
-
+        
 phases:
     pre_build:
         commands:
-           - ls .
-          - pwd
-
+            - ls .
+            - pwd
     build:
         commands:
             - echo Build started on 'date'
             - ./scripts/build-docker.sh
-            
         finally:
             - npm run package
             - npm prune --production
