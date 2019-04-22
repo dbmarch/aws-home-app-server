@@ -8,12 +8,13 @@ env:
 phases:
     pre_build:
         commands:
+           - ls .
+          - pwd
+
     build:
         commands:
             - echo Build started on 'date'
-            - ls .
-            - pwd
-            ./scripts/build-docker.sh
+            - ./scripts/build-docker.sh
             
         finally:
             - npm run package
