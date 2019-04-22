@@ -13,7 +13,8 @@
 	"scripts": {
 		"start": "node ./src/server.js",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"pmstart": "pm2 start ./src/server.config.js"
+		"pmstart": "pm2 start ./src/server.config.js",
+		"package": "NODE_ENV=production"
 	},
 	"repository": {
 		"type": "git",

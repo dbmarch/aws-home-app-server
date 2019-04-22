@@ -4,7 +4,7 @@ env:
     variables:
         environment: 'dev'
         ECR_REPO: '/home-app'
-        
+
 phases:
     pre_build:
         commands:
@@ -12,7 +12,7 @@ phases:
             - pwd
     build:
         commands:
-            - echo Build started on 'date'
+            - echo Build started on `date`
             - ./scripts/build-docker.sh
         finally:
             - npm run package
@@ -20,4 +20,4 @@ phases:
             - echo build phase finished
     post_build:
         commands:
-            - echo Build completed on 'date'
+            - echo Build completed on `date`
