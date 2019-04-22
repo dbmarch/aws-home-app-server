@@ -11,8 +11,13 @@ phases:
     build:
         commands:
             - echo Build started on 'date'
-            - npm i
+            - ls .
+            - pwd
+            ./scripts/build-docker.sh
+            
         finally:
+            - npm run package
+            - npm prune --production
             - echo build phase finished
     post_build:
         commands:
