@@ -3,7 +3,8 @@ export APP_NAME=`node -e "console.log(require('./package.json').name);"`
 export AWS_REGION="us-east-2"
 export ECR_REPO="327804519666.dkr.ecr.us-east-2.amazonaws.com/home-app-server"
 export VERSION=`node -e "console.log(require('./package.json').version);"`
-echo ${VERSION}
+echo "Version "${VERSION}
+echo "App name: "${APP_NAME}
 
 if [ -f packaget-lock.json ]; then
   echo "Using locked versions"
@@ -17,11 +18,12 @@ echo "Code is built"
 
 npm run package || exit 1
 npm prune --production || exit 1
+echo "ECR REPO:"
 echo ${ECR_REPO}
 IMAGE=$ECR_REPO:${VERSION}
 AWS_REGISTRY=327804519666.dkr.ecr.us-east-2.amazonaws.com
 
-echo `IMAGE ${IMAGE}`
+echo "IMAGE "${IMAGE}
 repo = `aws ecr describe-repositories --repository-names ${ECR_REPO}`
 
 echo ${repo}
