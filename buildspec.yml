@@ -10,6 +10,7 @@ phases:
         commands:
             - ls .
             - pwd
+            - chmod +x ./scripts/*.sh
     build:
         commands:
             - echo Build started on `date`
