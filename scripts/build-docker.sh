@@ -1,8 +1,6 @@
-ls
-pwd
-
+export APP_NAME = `node -e "console.log(require('./package.json').name);"`
+export AWS_REGION=us-east-2
 EXPORT ECR_REPO=327804519666.dkr.ecr.us-east-2.amazonaws.com/home-app-server
-
 EXPORT VERSION=`node -e "console.log(require(./package.json').version);"`
 
 if [ -f packaget-lock.json ]; then
@@ -25,6 +23,7 @@ repo = `aws ecr describe-repositories --repository-names ${ECR_REPO}`
 
 echo ${repo}
 
-aws ecr get-login --no-include-email --region us-east-2 --registry-ids 327804519666
+`aws ecr get-login --no-include-email --region us-east-2 --registry-ids 327804519666`
 docker build -t $IMAGE . || exit 1
-
+docker push $AWS_REGISTRY/$IMAGE || exit 1
+docker push $AWS_REGISTRY/$ECR_REPO:latest
