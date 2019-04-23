@@ -3,6 +3,7 @@ export APP_NAME=`node -e "console.log(require('./package.json').name);"`
 export AWS_REGION="us-east-2"
 export ECR_REPO="home-app-server"
 export VERSION=`node -e "console.log(require('./package.json').version);"`
+export STACK_NAME="home-app-server"
 echo "Version "${VERSION}
 echo "App name: "${APP_NAME}
 
@@ -34,3 +35,19 @@ docker tag $IMAGE $AWS_REGISTRY/$IMAGE || exit 1
 docker tag $IMAGE $AWS_REGISTRY/$ECR_REPO:latest || exit 1
 docker push $AWS_REGISTRY/$IMAGE || exit 1
 docker push $AWS_REGISTRY/$ECR_REPO:latest || exit 1
+
+# Update the Cloud formation Template
+
+export STACK_INFO=`aws cloudformation describe-stacks --stack-name $STACK_NAME`
+STACK_PARAMETERS=`node -e"console.log(process.env.STACK_INFO)"`
+STACK_STATUS=`node -e "console.log(JSON.parse(process.env.STACK_INFO).STacks[0].StackStatus"`
+
+echo ${STACK_INFO}
+echo "STACK_PARAM"
+echo ${STACK_PARAMETERS}
+echo "STACK STATUS"
+echo ${STACK_STATUS}
+
+# perform cleanup
+#docker rmi -f $IMAGE
+#docker rmi -f $AWS_REGISTRY/$IMAGE
