@@ -1,7 +1,7 @@
 echo "Running Build-docker.sh"
 export APP_NAME=`node -e "console.log(require('./package.json').name);"`
 export AWS_REGION="us-east-2"
-export ECR_REPO="327804519666.dkr.ecr.us-east-2.amazonaws.com/home-app-server"
+export ECR_REPO="home-app-server"
 export VERSION=`node -e "console.log(require('./package.json').version);"`
 echo "Version "${VERSION}
 echo "App name: "${APP_NAME}
@@ -24,6 +24,7 @@ IMAGE=$ECR_REPO:${VERSION}
 AWS_REGISTRY=327804519666.dkr.ecr.us-east-2.amazonaws.com
 
 echo "IMAGE "${IMAGE}
+
 repo = `aws ecr describe-repositories --repository-names ${ECR_REPO}`
 
 echo ${repo}
