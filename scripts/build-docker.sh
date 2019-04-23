@@ -49,9 +49,19 @@ STACK_STATUS=`node -e "console.log(JSON.parse(process.env.STACK_INFO).Stacks[0].
 echo "STACK_PARAM "${STACK_PARAMETERS}
 echo "STACK STATUS "${STACK_STATUS}
 
+if [ "$STACK_STATUS" = "CREATE_COMPLETE" ] || [ "$STACK_STATUS" = "UPDATE_COMPLETE" ] || [ "$STACK_STATUS" = "UPDATE_ROLLBACK_COMPLETE" ]
+then
+   echo "Updating the stack "$STACK_NAME
+   echo "STACK parameters: "$STACK_PARAMETERS
+   aws cloudformation update-stack --stack-name $STACK_NAME --use-previous-template -- parameters "$STACK_PARAMETERS" --capabilites CAPABILITY_NAMED_IAM
+else
+  echo "UNABLE TO UPDATE STACK "$STACK_STATUS
+fi
+
 # perform cleanup
 #docker rmi -f $IMAGE
 #docker rmi -f $AWS_REGISTRY/$IMAGE
 
-docker images -f "dangling=true"
-#docker rmi -f $(docker images -f "dangling=true" -q)
+if docker images -f "dangling=true" | grep ago --quiet; then
+     docker rmi -f $(docker images -f "dangling=true" -q)
+fi
