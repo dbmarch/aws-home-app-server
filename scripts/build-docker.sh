@@ -53,4 +53,5 @@ echo "STACK STATUS "${STACK_STATUS}
 #docker rmi -f $IMAGE
 #docker rmi -f $AWS_REGISTRY/$IMAGE
 
-docker rmi -f $(docker images -f "dangling=true" -q)
+docker images -f "dangling=true"
+#docker rmi -f $(docker images -f "dangling=true" -q)
