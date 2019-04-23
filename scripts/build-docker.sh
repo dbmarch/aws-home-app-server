@@ -37,7 +37,7 @@ docker push $AWS_REGISTRY/$IMAGE || exit 1
 docker push $AWS_REGISTRY/$ECR_REPO:latest || exit 1
 
 # Update the Cloud formation Template
-
+echo ${STACK_NAME}
 export STACK_INFO=`aws cloudformation describe-stacks --stack-name $STACK_NAME`
 STACK_PARAMETERS=`node -e"console.log(process.env.STACK_INFO)"`
 STACK_STATUS=`node -e "console.log(JSON.parse(process.env.STACK_INFO).STacks[0].StackStatus"`
