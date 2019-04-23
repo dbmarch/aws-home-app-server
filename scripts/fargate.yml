@@ -27,13 +27,13 @@ Parameters:
     Default: 443
   HealthCheckPath:
     Type: String
-    Default: /healthcheck
+    Default: /ping
   HostedZoneName:
     Type: String
     Default: dave-and-lisa.net
   Subdomain:
     Type: String
-    Default: aws-api
+    Default: api
   # for autoscaling
   MinContainers:
     Type: Number
