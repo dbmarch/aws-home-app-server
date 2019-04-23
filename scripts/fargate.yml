@@ -14,7 +14,7 @@ Parameters:
   Image:
     Type: String
     # Update with the Docker image. "You can use images in the Docker Hub registry or specify other repositories (repository-url/image:tag)."
-    Default: 327804519666.dkr.ecr.us-east-2.amazonaws.com/home-app-server:tag
+    Default: 327804519666.dkr.ecr.us-east-2.amazonaws.com/home-app-server:latest
   ServiceName:
     Type: String
     # update with the name of the service
@@ -33,7 +33,7 @@ Parameters:
     Default: dave-and-lisa.net
   Subdomain:
     Type: String
-    Default: api
+    Default: aws-api
   # for autoscaling
   MinContainers:
     Type: Number

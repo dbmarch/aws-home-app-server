@@ -10,6 +10,9 @@ app.use(cors())
 app.use(express.static(path.join(__dirname, 'build')))
 app.use(bodyParser.json())
 
+app.get('/healthcheck', (req, res) => {
+	res.send({ message: 'health check' })
+})
 app.get('/api/hello', (req, res) => {
 	res.send({ message: 'Hello From Express' })
 })
