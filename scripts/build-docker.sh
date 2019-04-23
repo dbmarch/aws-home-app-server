@@ -53,7 +53,7 @@ if [ "$STACK_STATUS" = "CREATE_COMPLETE" ] || [ "$STACK_STATUS" = "UPDATE_COMPLE
 then
    echo "Updating the stack "$STACK_NAME
    echo "STACK parameters: "$STACK_PARAMETERS
-   aws cloudformation update-stack --stack-name $STACK_NAME --use-previous-template -- parameters "$STACK_PARAMETERS" --capabilites CAPABILITY_NAMED_IAM
+   aws cloudformation update-stack --stack-name $STACK_NAME --use-previous-template --parameters "$STACK_PARAMETERS" --capabilites CAPABILITY_NAMED_IAM
 else
   echo "UNABLE TO UPDATE STACK "$STACK_STATUS
 fi
