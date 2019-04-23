@@ -25,9 +25,10 @@ AWS_REGISTRY=327804519666.dkr.ecr.us-east-2.amazonaws.com
 
 echo "IMAGE "${IMAGE}
 
-repo = `aws ecr describe-repositories --repository-names ${ECR_REPO}`
-
+repo=`aws ecr describe-repositories --repository-names ${ECR_REPO}`
 echo ${repo}
+repo2=`aws ecr describe-repositories --repository-names home-app-server`
+echo ${repo2}
 
 `aws ecr get-login --no-include-email --region us-east-2 --registry-ids 327804519666`
 docker build -t $IMAGE . || exit 1
