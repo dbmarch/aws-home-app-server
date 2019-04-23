@@ -1,0 +1,183 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Resources": {
+		"HomeAppECSRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"Policies": [
+					{
+						"PolicyName": "HomeAppPolicy",
+						"PolicyDocument": {
+							"Version": "2012-10-17",
+							"Statement": [
+								{
+									"Effect": "Allow",
+									"Action": "lambda:InvokeFunction",
+									"Resource": {
+										"Fn::Join": [
+											"",
+											[
+												"arn:aws:lambda:us-east-2",
+												{
+													"Ref": "AWS::AccountId"
+												},
+												":function:*"
+											]
+										]
+									}
+								}
+							]
+						}
+					}
+				],
+				"ManagedPolicyArns": ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"],
+				"AssumeRolePolicyDocument": {
+					"Type": "AWS::IAM::Role",
+
+					"Version": "2008-10-17",
+					"Statement": [
+						{
+							"Sid": "",
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "ecs-tasks.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+				}
+			}
+		},
+		"HomeAppElbListenerRule": {
+			"Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+			"Properties": {
+				"Actions": [
+					{
+						"Type": "forward",
+						"TargetGroupArn": {
+							"Ref": "HomeAppElbTargetGroup"
+						}
+					}
+				],
+				"Conditions": [
+					{
+						"Field": "path-pattern",
+						"Values": ["/api/*"]
+					}
+				],
+				"ListenerArn":
+					"arn:aws:elasticloadbalancing:us-east-2:327804519666:listener/app/lb-home-app-server/eea68e897dcda87d/b058730d4d164cd7",
+				"Priority": 1
+			},
+			"DependsOn": []
+		},
+		"HomeAppElbTargetGroup": {
+			"Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+			"Properties": {
+				"Name": "lb-home-app-server",
+				"Port": 3001,
+				"Protocol": "HTTP",
+				"VpcId": "vpc-f1fbee99",
+				"TargetType": "ip"
+			},
+			"DependsOn": []
+		},
+		"HomeAppEcsCluster": {
+			"Type": "AWS::ECS::Cluster",
+			"Properties": {}
+		},
+		"HomeAppEcsService": {
+			"Type": "AWS::ECS::Service",
+			"Properties": {
+				"Cluster": {
+					"Ref": "HomeAppEcsCluster"
+				},
+				"TaskDefinition": {
+					"Ref": "HomeAppTaskDefinition"
+				},
+				"DesiredCount": 1,
+				"LaunchType": "FARGATE",
+				"LoadBalancers": [
+					{
+						"ContainerName": "HomeAppWorker",
+						"ContainerPort": 3001,
+						"TargetGroupArn": {
+							"Ref": "HomeAppElbTargetGroup"
+						}
+					}
+				]
+			},
+			"DependsOn": []
+		},
+		"HomeAppTaskDefinition": {
+			"Type": "AWS::ECS::TaskDefinition",
+			"Properties": {
+				"Cpu": "256",
+				"Memory": "1GB",
+				"NetworkMode": "awsvpc",
+				"RequiresCompatibilities": ["FARGATE"],
+				"ExecutionRoleArn": { "Ref": "HomeAppECSRole" },
+				"TaskRoleArn": {
+					"Fn::GetAtt": ["HomeAppECSRole", "Arn"]
+				},
+				"ContainerDefinitions": [
+					{
+						"Name": "HomeAppWorker",
+						"Image": {
+							"Fn::Join": [
+								":",
+								[
+									"327804519666.dkr.ecr.us-east-2.amazonaws.com/home-app-server",
+									{
+										"Ref": "ApplicationVersion"
+									}
+								]
+							]
+						},
+						"MemoryReservation": "1000",
+						"LogConfiguration": {
+							"LogDriver": "awslogs",
+							"Options": {
+								"awslogs-group": "home-app-server",
+								"awslogs-region": "us-east-2",
+								"awslogs-stream-prefix": "home-app-server-ecs"
+							}
+						},
+						"PortMappings": [
+							{
+								"ContainerPort": 3001,
+								"HostPort": 3001
+							}
+						]
+					}
+				]
+			}
+		},
+		"HomeAppWorkerSG": {
+			"Type": "AWS::EC2::SecurityGroup",
+			"Properties": {
+				"VpcId": "vpc-f1fbee99",
+				"GroupDescription": "Allow Http",
+				"SecurityGroupIngress": [
+					{
+						"IpProtocol": "tcp",
+						"FromPort": "22",
+						"ToPort": "22",
+						"CidrIp": "10.0.0.0/16"
+					},
+					{
+						"IpProtocol": "tcp",
+						"FromPort": "3001",
+						"ToPort": "3001",
+						"CidrIp": "10.0.0.0/16"
+					}
+				]
+			}
+		}
+	},
+	"Parameters": {
+		"ApplicationVersion": {
+			"Type": "String"
+		}
+	}
+}
