@@ -41,8 +41,8 @@ echo "STACK NAME: "$STACK_NAME
 
 shell_stack=`aws cloudformation describe-stacks --stack-name $STACK_NAME`
 echo $shell_stack
-
-export STACK_INFO=`aws cloudformation describe-stacks --stack-name $STACK_NAME`
+export STACK_INFO=$shell_stack
+#export STACK_INFO=`aws cloudformation describe-stacks --stack-name $STACK_NAME`
 STACK_PARAMETERS=`node -e "console.log(JSON.stringify(JSON.parse(process.env.STACK_INFO).Stacks[0].Parameters))"`
 STACK_STATUS=`node -e "console.log(JSON.parse(process.env.STACK_INFO).Stacks[0].StackStatus)"`
 
@@ -52,3 +52,5 @@ echo "STACK STATUS "${STACK_STATUS}
 # perform cleanup
 #docker rmi -f $IMAGE
 #docker rmi -f $AWS_REGISTRY/$IMAGE
+
+docker rmi -f $(docker images -f "dangling=true" -q)
