@@ -19,15 +19,15 @@ echo "Code is built"
 
 npm run package || exit 1
 npm prune --production || exit 1
-echo "ECR REPO:"
-echo ${ECR_REPO}
+
+echo "ECR_REPO: "${ECR_REPO}
 IMAGE=$ECR_REPO:${VERSION}
 AWS_REGISTRY=327804519666.dkr.ecr.us-east-2.amazonaws.com
 
-echo "IMAGE "${IMAGE}
+echo "IMAGE "$IMAGE
 
 repo=`aws ecr describe-repositories --repository-names ${ECR_REPO}`
-echo ${repo}
+echo "ECR REPOSITORIES: "$repo
 
 `aws ecr get-login --no-include-email --region us-east-2 --registry-ids 327804519666`
 docker build -t $IMAGE . || exit 1
@@ -41,7 +41,7 @@ echo "STACK NAME: "$STACK_NAME
 
 shell_stack=`aws cloudformation describe-stacks --stack-name $STACK_NAME`
 echo $shell_stack
-export STACK_INFO=$shell_stack
+export STACK_INFO=`${shell_stack}`
 #export STACK_INFO=`aws cloudformation describe-stacks --stack-name $STACK_NAME`
 STACK_PARAMETERS=`node -e "console.log(JSON.stringify(JSON.parse(process.env.STACK_INFO).Stacks[0].Parameters))"`
 STACK_STATUS=`node -e "console.log(JSON.parse(process.env.STACK_INFO).Stacks[0].StackStatus)"`
