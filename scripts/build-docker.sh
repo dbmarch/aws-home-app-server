@@ -27,10 +27,10 @@ echo "IMAGE "${IMAGE}
 
 repo=`aws ecr describe-repositories --repository-names ${ECR_REPO}`
 echo ${repo}
-repo2=`aws ecr describe-repositories --repository-names home-app-server`
-echo ${repo2}
 
 `aws ecr get-login --no-include-email --region us-east-2 --registry-ids 327804519666`
 docker build -t $IMAGE . || exit 1
+docker tag $IMAGE $AWS_REGISTRY/$IMAGE || exit 1
+docker tag $IMAGE $AWS_REGISTRY/$ECR_REPO:latest || exit 1
 docker push $AWS_REGISTRY/$IMAGE || exit 1
-docker push $AWS_REGISTRY/$ECR_REPO:latest
+docker push $AWS_REGISTRY/$ECR_REPO:latest || exit 1
