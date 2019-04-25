@@ -11,6 +11,9 @@ Parameters:
     Type: String
     # Update with the certificate ARN from Certificate Manager, which must exist in the same region.
     Default: 'arn:aws:acm:us-east-2:327804519666:certificate/074b08a8-dec3-4bcd-b601-69ae73d9927d'
+  Timestamp:
+    Type: String
+    Default: 'Date and Time'
   Image:
     Type: String
     # Update with the Docker image. "You can use images in the Docker Hub registry or specify other repositories (repository-url/image:tag)."
@@ -92,6 +95,9 @@ Resources:
               awslogs-region: !Ref AWS::Region
               awslogs-group: !Ref LogGroup
               awslogs-stream-prefix: ecs
+          Environment:
+            Name: timestamp
+            Value: !Ref Timestamp
   # A role needed by ECS
   ExecutionRole:
     Type: AWS::IAM::Role
