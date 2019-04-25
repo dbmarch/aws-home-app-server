@@ -26,7 +26,7 @@ services(app)
 console.info('Services Started')
 
 app.get('/healthcheck', (req, res) => {
-	res.status(200).send()
+	res.status(200).send({ message: 'healthcheck' })
 })
 
 app.get('/', function(req, res) {
