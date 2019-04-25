@@ -22,7 +22,7 @@ app.get('/api/hello', (req, res) => {
 })
 
 app.get('/', function(req, res) {
-	res.send('Hello from React Server')
+	res.send('Hello from Home App Server')
 })
 
 if (process.env.NODE_ENV === 'production') {
