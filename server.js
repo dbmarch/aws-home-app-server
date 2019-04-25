@@ -2,27 +2,41 @@ const express = require('express')
 var bodyParser = require('body-parser')
 const path = require('path')
 const app = express()
-var cors = require('cors')
+const cors = require('cors')
+const compression = require('compression')
+const morgan = require('morgan')
+const { name, version, description } = require('./package.json')
+const services = require('./src/services')
 
 const port = process.env.PORT || 3001
-
+app.use(morgan('dev'))
 app.use(cors())
 app.use(express.static(path.join(__dirname, 'build')))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json({ limit: '50mb' }))
+
+app.use('/*', (err, req, res, next) => {
+	console.error('ERROR ', err)
+	next()
+})
+
+console.info('Application Started ', name, version, description)
+
+services(app)
+console.info('Services Started')
 
 app.get('/healthcheck', (req, res) => {
-	res.send({ message: 'health check' })
-})
-app.get('/ping', (req, res) => {
-	res.send({ message: 'health check' })
-})
-
-app.get('/api/hello', (req, res) => {
-	res.send({ message: 'Hello From Express' })
+	res.status(200).send()
 })
 
 app.get('/', function(req, res) {
-	res.send('Hello from Home App Server')
+	const response = {
+		message: 'Hello from Home App Server',
+		name,
+		version,
+		description
+	}
+	res.send(response)
 })
 
 if (process.env.NODE_ENV === 'production') {

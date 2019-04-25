@@ -5,15 +5,16 @@
 	"main": "server.js",
 	"dependencies": {
 		"body-parser": "^1.18.3",
+		"compression": "^1.7.4",
 		"cors": "^2.8.5",
 		"express": "^4.16.4",
+		"morgan": "^1.9.1",
 		"path": "^0.12.7"
 	},
 	"devDependencies": {},
 	"scripts": {
-		"start": "node ./src/server.js",
+		"start": "set DEBUG=express:* && node ./server.js",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"pmstart": "pm2 start ./src/server.config.js",
 		"package": "NODE_ENV=production"
 	},
 	"repository": {
