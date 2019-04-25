@@ -1,1 +1,0 @@
-ssh -i "~\Desktop\secrets\home-app.pem" ubuntu@ec2-3-19-68-26.us-east-2.compute.amazonaws.com
