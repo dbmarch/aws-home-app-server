@@ -14,11 +14,14 @@ Parameters:
   Image:
     Type: String
     # Update with the Docker image. "You can use images in the Docker Hub registry or specify other repositories (repository-url/image:tag)."
-    Default: 327804519666.dkr.ecr.us-east-2.amazonaws.com/home-app-server:latest
+    Default: 327804519666.dkr.ecr.us-east-2.amazonaws.com/home-app-server
   ServiceName:
     Type: String
     # update with the name of the service
     Default: aws-home-server
+  ApplicationVersion:
+    Type: String
+    Default: latest
   ContainerPort:
     Type: Number
     Default: 3001
@@ -82,7 +85,7 @@ Resources:
       TaskRoleArn: !Ref TaskRole
       ContainerDefinitions:
         - Name: !Ref ServiceName
-          Image: !Ref Image
+          Image:  !Join [':', [!Ref Image, !Ref ApplicationVersion]]
           PortMappings:
             - ContainerPort: !Ref ContainerPort
           # Send logs to CloudWatch Logs
@@ -265,3 +268,6 @@ Outputs:
   Endpoint:
     Description: Endpoint
     Value: !Join ['', ['https://', !Ref DNSRecord]]
+  ImageUrl:
+    Description: ECR and Version
+    Value: !Join [':', [!Ref Image, !Ref ApplicationVersion]]
