@@ -47,7 +47,8 @@ BUILD_STAMP=`date "+%Y%m%d-%H%M"`
 
 echo "BUILD_STAMP "$BUILD_STAMP
 #export STACK_INFO=`aws cloudformation describe-stacks --stack-name $STACK_NAME`
-STACK_PARAMETERS=`node -e "console.log(JSON.stringify(JSON.parse(process.env.STACK_INFO).Stacks[0].Parameters))"`
+#STACK_PARAMETERS=`node -e "console.log(JSON.stringify(JSON.parse(process.env.STACK_INFO).Stacks[0].Parameters))"`
+STACK_PARAMETERS=`node -e "console.log(JSON.stringify(JSON.parse(process.env.STACK_INFO).Stacks[0].Parameters.map(param=>(param.ParameterKey===process.env.STACK_VERSION_PARAMETER) ? {ParameterKey : param.ParameterKey, ParameterValue: process.env.VERSION} : {ParameterKey : param.ParameterKey, UsePreviousValue:true})))"`
 STACK_STATUS=`node -e "console.log(JSON.parse(process.env.STACK_INFO).Stacks[0].StackStatus)"`
 
 echo "STACK_PARAM "${STACK_PARAMETERS}
