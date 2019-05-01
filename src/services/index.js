@@ -11,6 +11,7 @@ const services = app => {
 	addRoute('/hello', router =>
 		router.get('/', (req, res, next) => res.status(200).send({ message: '`Hello from Express' }))
 	)
+	addRoute('/weather', require('./weatherService'))
 }
 
 module.exports = services
